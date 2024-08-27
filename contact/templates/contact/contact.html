@@ -1,0 +1,50 @@
+{% extends "global/base.html" %}
+
+{% block content %}
+
+<div class="single-contact">
+    
+    <div class="header-content">
+    <a class="btn-back btn-link" href="{% url "contact:index" %}"> 
+        <i class="fa-solid fa-chevron-left fa-xl"></i> 
+    </a>
+    
+    <h1 class="single-contact-name">
+            {{contact.first_name}} {{contact.last_name}}
+        </h1>
+    </div>
+
+        <p><span class="bold">ID: </span>{{contact.id}}</p>
+        <p><span class="bold">E-mail: </span>{{contact.email}}</p>
+        <p><span class="bold">Phone: </span> {{contact.phone}}</p>
+        <p><span class="bold">Created at: </span> {{contact.created_date}}</p>
+        <p><span class="bold">Description: </span> {{contact.description}}</p>
+        <p><span class="bold">Category: </span>{% comment %} {{contact.category.id}} - {% endcomment %}{{contact.category.category_name}}</p> 
+
+        {% if contact.picture %}
+            <p><img src="{{ contact.picture.url }}" alt="{{ contact.fist_name }} {{ contact.last_name }}"></p>
+        {% endif %}
+
+        {% if contact.owner %} 
+            <p><span class="bold">Owner: </span> {{contact.owner}}</p>
+        {% endif %}
+
+        <div class="contact-links">
+            {% if contact.owner == user %}
+                <a class="btn btn-link" href="{% url "contact:update" contact.id %}">Update</a>
+                
+                <form action="{% url "contact:delete" contact.pk %}" method="POST">
+                    {% csrf_token %}
+                
+                    {% if confirmation == "no" %}
+                        <input type="hidden" name="confirmation" value='yes'>
+                        <button class="btn btn-link btn-red" type="submit">Confirmar?</button>   
+                    {% else %}
+                        <button class="btn btn-link btn-red" type="submit">Delete</button>
+                    {% endif %}
+                </form>
+            {% endif %}
+        </div>
+
+    </div>
+{% endblock content %}

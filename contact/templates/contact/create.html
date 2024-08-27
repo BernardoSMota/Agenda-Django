@@ -1,0 +1,47 @@
+{% extends "global/base.html" %}
+
+{% block content %}
+<h1>{{ action }} CONTACT</h1>
+<div class="form-wrapper">
+
+  <h2>Contact</h2>
+
+  <form 
+    action="{{ form_action }}"
+    method="POST"
+    enctype="multipart/form-data"
+  >
+
+    {% csrf_token %}
+
+    {% for field in form %}
+      <div class="form-content">
+        <div class="form-group">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {{ field.errors }}
+        </div>
+      </div>
+
+      {% if field.name == 'picture' and field.value.url %}
+        <div class="form-group">
+          <p> <img src="{{field.value.url}}" alt=""></p>
+        </div>
+      {% endif %}
+    {% endfor %}
+
+    <div class="form-content">
+      <div class="form-group flex-row">
+        {% if action == "CREATE" %}
+          <a class="btn btn-button btn-link btn-red width100" href="{% url "contact:index" %}">Cancel</a>
+        {% else %}
+          <a class="btn btn-button btn-link btn-red width100" href="{% url "contact:contact" current_id %}">Cancel</a>
+        {% endif %}
+        
+        <button class="btn btn-button btn-link width100" type="submit">Save</button>
+      </div>
+    </div>
+
+  </form>
+</div>
+{% endblock content %}
